@@ -6,17 +6,15 @@ const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
 
 let users = [];
 const fetchUsers = () => {
-  getUsers().then(list => users = list);
+  getUsers()
+  .then(list => users = list)
+  .catch(e => {
+    console.log('Catched by me', e.message, e);
+  });
 };
 
 bot.start((ctx) => {
-
-  try {
-    fetchUsers();
-  } catch (e) {
-    console.log(e.message, e);
-  }
-
+  fetchUsers();
   ctx.reply('Welcome PS5 notifier', Markup.keyboard(['Subscribe', 'Unsubscribe', 'Test']));
 });
 
