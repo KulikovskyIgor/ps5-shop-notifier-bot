@@ -1,43 +1,14 @@
 // Require all env variables before executing the main server run script
 process.env.NODE_ENV !== 'production' && require('dotenv').config();
-console.log('process.env.NODE_ENV',process.env.NODE_ENV);
-const { Telegraf, Markup } = require('telegraf');
-const { getUsers, addUser, removeUser } = require('./src/users-db');
-const { test } = require('./src/stores-checker');
 
-const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
+require('./src/telegram-bot');
 
-let users = [];
-const fetchUsers = () => {
-  getUsers().then(list => users = list);
-};
+const PORT = process.env.PORT || 5000
+const express = require('express');
+const app = express();
 
-bot.start((ctx) => {
-  fetchUsers();
-  ctx.reply('Welcome PS5 notifier', Markup.keyboard(['Subscribe', 'Unsubscribe', 'Test']));
+app.get('/', function(req, res){
+  res.send('Bot is running');
 });
 
-bot.hears('Subscribe', (ctx) => {
-  const { id, first_name, last_name } = ctx.update.message.from;
-  addUser(id, first_name, last_name).then(() => fetchUsers());
-});
-
-bot.hears('Unsubscribe', (ctx) => {
-  removeUser(ctx.update.message.from.id).then(() => fetchUsers());
-});
-
-bot.hears('Test', async (ctx) => {
-  test().then((hasContent) => {
-    ctx.reply('hasContent - ' + hasContent);
-  });
-});
-
-// setInterval(() => {
-//   users.forEach(user => {
-//     bot.telegram.sendMessage(user.chatId, 'test')
-//   });
-// }, 3000)
-
-bot.launch()
-process.once('SIGINT', () => bot.stop('SIGINT'))
-process.once('SIGTERM', () => bot.stop('SIGTERM'))
+app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
