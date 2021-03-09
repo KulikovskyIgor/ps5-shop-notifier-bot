@@ -13,8 +13,6 @@ const account = {
 	"client_x509_cert_url": process.env.CF_CLIENT_CERT_URL
 };
 
-console.log("account", account);
-
 admin.initializeApp({
     credential: admin.credential.cert(account)
 });
