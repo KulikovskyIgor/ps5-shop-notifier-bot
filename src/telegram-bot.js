@@ -31,9 +31,12 @@ bot.hears('Test', async (ctx) => {
 
 let counter = 0;
 setInterval(() => {
+  console.log('---1', counter);
   counter += 10;
   users.forEach(user => {
-    bot.telegram.sendMessage(user.chatId, 'alive - ' + (counter / 60) + ' minutes');
+    const min = counter / 60;
+    console.log('---2', min);
+    bot.telegram.sendMessage(user.chatId, 'alive - ' + min + ' minutes');
   });
 }, 10_000);
 
