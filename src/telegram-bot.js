@@ -31,11 +31,11 @@ bot.hears('Test', async (ctx) => {
 
 let counter = 0;
 setInterval(() => {
-  counter++;
+  counter += 10;
   users.forEach(user => {
-    bot.telegram.sendMessage(user.chatId, 'alive - ' + counter + ' minutes');
+    bot.telegram.sendMessage(user.chatId, 'alive - ' + (counter / 60) + ' minutes');
   });
-}, 60_000);
+}, 10_000);
 
 bot.launch()
 process.once('SIGINT', () => bot.stop('SIGINT'))
