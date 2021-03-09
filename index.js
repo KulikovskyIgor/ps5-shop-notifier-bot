@@ -1,6 +1,6 @@
 // Require all env variables before executing the main server run script
-require('dotenv').config();
-
+process.env.NODE_ENV !== 'production' && require('dotenv').config();
+console.log('process.env.NODE_ENV',process.env.NODE_ENV);
 const { Telegraf, Markup } = require('telegraf');
 const { getUsers, addUser, removeUser } = require('./src/users-db');
 const { test } = require('./src/stores-checker');
