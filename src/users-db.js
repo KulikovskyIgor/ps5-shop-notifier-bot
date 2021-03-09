@@ -1,8 +1,20 @@
 const admin = require('firebase-admin');
-const serviceAccount = require('../db-conf.json');
+
+const account = {
+	"type": process.env.CF_TYPE,
+	"project_id": process.env.CF_PROJECT_ID,
+	"private_key_id": process.env.CF_PRIVATE_KEY_ID,
+	"private_key": process.env.CF_PRIVATE_KEY,
+	"client_email": process.env.CF_CLIENT_EMAIL,
+	"client_id": process.env.CF_CLIENT_ID,
+	"auth_uri": process.env.CF_AUTH_URI,
+	"token_uri": process.env.CF_TOKEN_URI,
+	"auth_provider_x509_cert_url": process.env.CF_AUTH_PROVIDER_URL,
+	"client_x509_cert_url": process.env.CF_CLIENT_CERT_URL
+};
 
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
+    credential: admin.credential.cert(account)
 });
 
 const db = admin.firestore();

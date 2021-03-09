@@ -2,7 +2,7 @@ const { Telegraf, Markup } = require('telegraf');
 const { getUsers, addUser, removeUser } = require('./src/users-db');
 const { test } = require('./src/stores-checker');
 
-const bot = new Telegraf('ID')
+const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
 
 let users = [];
 const fetchUsers = () => {
