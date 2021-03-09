@@ -10,7 +10,13 @@ const fetchUsers = () => {
 };
 
 bot.start((ctx) => {
-  fetchUsers();
+
+  try {
+    fetchUsers();
+  } catch (e) {
+    console.log(e.message, e);
+  }
+
   ctx.reply('Welcome PS5 notifier', Markup.keyboard(['Subscribe', 'Unsubscribe', 'Test']));
 });
 
