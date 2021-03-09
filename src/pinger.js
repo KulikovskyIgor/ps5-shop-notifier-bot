@@ -17,10 +17,11 @@ module.exports.startPingSession = async () => {
     setInterval(() => {
         counter += 10;
         const mins = counter / 60;
+        const delay = 60 * 15;
 
-        if (!(counter % 60)) {
+        if (!(counter % delay)) {
             ping();
-            console.log('Ping session:' + mins);
+            console.log('Ping session: ' + mins);
         }
     }, 10_000);
 };
