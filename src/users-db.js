@@ -12,6 +12,9 @@ const account = {
 	"auth_provider_x509_cert_url": process.env.CF_AUTH_PROVIDER_URL,
 	"client_x509_cert_url": process.env.CF_CLIENT_CERT_URL
 };
+console.log('account', account);
+console.log('-------------');
+console.log('account', JSON.stringify(account));
 
 admin.initializeApp({
     credential: admin.credential.cert(account)
