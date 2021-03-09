@@ -1,3 +1,6 @@
+// Require all env variables before executing the main server run script
+require('dotenv').config();
+
 const { Telegraf, Markup } = require('telegraf');
 const { getUsers, addUser, removeUser } = require('./src/users-db');
 const { test } = require('./src/stores-checker');
