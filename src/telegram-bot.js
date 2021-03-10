@@ -7,10 +7,10 @@ const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
 let users = [];
 const fetchUsers = () => {
   getUsers()
-  .then(list => users = list)
-  .catch(e => {
-    console.log('Catched by me', e.message, e);
-  });
+    .then(list => users = list)
+    .catch(e => {
+      console.log('Catched by me', e.message, e);
+    });
 };
 
 bot.start((ctx) => {
@@ -28,9 +28,12 @@ bot.hears('Unsubscribe', (ctx) => {
 });
 
 bot.hears('Test', async (ctx) => {
-  test().then((hasContent) => {
-    ctx.reply('hasContent - ' + hasContent);
-  });
+  test()
+    .then((hasContent) => {
+      ctx.reply('hasContent - ' + hasContent);
+    }).catch(e => {
+      console.log('Catched by me', e.message, e);
+    })
 });
 
 let counter = 0;
