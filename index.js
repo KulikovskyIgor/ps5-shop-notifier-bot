@@ -1,7 +1,7 @@
 // Require all env variables before executing the main server run script
 process.env.NODE_ENV !== 'production' && require('dotenv').config();
 
-require('./src/telegram-bot');
+// require('./src/telegram-bot');
 const { startPingSession } = require('./src/pinger');
 
 const PORT = process.env.PORT || 5000;
