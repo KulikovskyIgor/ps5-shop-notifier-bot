@@ -1,6 +1,7 @@
 const { Telegraf, Markup } = require('telegraf');
-const { getUsers, addUser, removeUser } = require('./users-db');
-const { test } = require('./stores-checker');
+const { getUsers, addUser, removeUser } = require('./cloud-db');
+const { checkStores } = require('./stores-checker');
+const { formatStoresStats } = require('./stats-formatter');
 
 const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
 
@@ -28,23 +29,38 @@ bot.hears('Unsubscribe', (ctx) => {
 });
 
 bot.hears('Test', async (ctx) => {
-  test()
-    .then((hasContent) => {
-      ctx.reply('hasContent - ' + hasContent);
+  checkStores()
+    .then((storesWithUpdatedStats) => {
+      ctx.replyWithMarkdownV2(formatStoresStats(storesWithUpdatedStats, 'updatedStats'));
     }).catch(e => {
       console.log('Catched by me', e.message, e);
     })
 });
 
-let counter = 0;
-setInterval(() => {
-  counter += 10;
-  users.forEach(user => {
-    const min = counter / 60;
-    bot.telegram.sendMessage(user.chatId, 'alive - ' + min + ' minutes');
-  });
-}, 10_000);
+function runTimer() {
+  if (!users.length) {
+    fetchUsers();
+  }
 
-bot.launch()
+  setTimeout(() => {
+    checkStores()
+      .then((storesWithUpdatedStats) => {
+        if (storesWithUpdatedStats.length) {
+          users.forEach(user => {
+            const message = formatStoresStats(storesWithUpdatedStats, 'updatedStats');
+            bot.telegram.sendMessage(user.chatId, message, { parse_mode: 'MarkdownV2' });
+          });
+        }
+      }).catch(e => {
+        console.log('Catched by me', e.message, e);
+      });
+
+      runTimer();
+  }, 60_000);
+}
+
+bot.launch();
+runTimer();
+
 process.once('SIGINT', () => bot.stop('SIGINT'))
 process.once('SIGTERM', () => bot.stop('SIGTERM'))

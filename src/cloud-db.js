@@ -47,3 +47,24 @@ module.exports.removeUser = (chatId) => {
         .doc(`${chatId}`)
         .update({ subscription: false });
 };
+
+module.exports.getStores = () => {
+    return db
+        .collection('stores')
+        .get()
+        .then(snapshot => {
+            const stores = [];
+            snapshot.forEach(doc => stores.push({ id: doc.id, ...doc.data() }));
+            return stores;
+        });
+};
+
+module.exports.addStoreStats = (storeId, stats) => {
+    return db
+        .collection('stores')
+        .doc(`${storeId}`)
+        .set(
+            { stats },
+            { merge: true }
+        );
+};
